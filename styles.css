@@ -1,0 +1,228 @@
+body {
+    background-color: #ffccff;
+    color: #4a004a;
+    font-family: Arial, sans-serif;
+    text-align: center;
+    padding: 20px;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed; /* Фиксирует фон, чтобы он не двигался при скролле */
+    min-height: 100vh; /* Минимальная высота для покрытия всего экрана */
+    overflow-x: hidden; /* Скрывает горизонтальную прокрутку для предотвращения показа меню */
+}
+
+.input-container {
+    margin: 20px 0;
+}
+
+input[type="text"] {
+    padding: 10px;
+    margin: 10px;
+    border: 2px solid #4a004a;
+    border-radius: 5px;
+    font-size: 16px;
+    width: 300px;
+}
+
+button {
+    padding: 10px 15px;
+    background-color: #4a004a;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin: 5px;
+    font-size: 14px;
+}
+
+button:hover {
+    background-color: #6a006a;
+}
+
+.edit-btn {
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    padding: 0;
+}
+
+.edit-btn:hover {
+    background-color: #f0f0f0;
+    border-radius: 5px;
+}
+
+.edit-btn::before {
+    content: "✏️";
+}
+
+.delete-btn {
+    background-color: #cc0000;
+    padding: 5px 10px;
+    font-size: 12px;
+}
+
+.delete-btn:hover {
+    background-color: #aa0000;
+}
+
+ul {
+    list-style-type: none;
+    padding: 0;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+li {
+    margin: 5px 0;
+    display: flex;
+    gap: 10px;
+    align-items: stretch;
+}
+
+.task-content {
+    flex: 1;
+    padding: 10px;
+    background-color: #fff;
+    border: 1px solid #4a004a;
+    border-radius: 5px;
+    cursor: pointer;
+    word-wrap: break-word;
+    display: flex;
+    align-items: center;
+}
+
+.task-content:hover {
+    background-color: #f0f0f0;
+}
+
+.edit-container {
+    background-color: #fff;
+    border: 1px solid #4a004a;
+    border-radius: 5px;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 50px;
+    height: 50px;
+}
+
+.edit-input {
+    flex: 1;
+    margin-right: 10px;
+    padding: 8px;
+    border: 2px solid #4a004a;
+    border-radius: 3px;
+    font-size: 14px;
+}
+
+.edit-buttons {
+    display: flex;
+    gap: 5px;
+}
+
+.editing-mode {
+    background-color: #fff;
+    border: 1px solid #4a004a;
+    border-radius: 5px;
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    width: 100%;
+}
+
+.save-btn {
+    background-color: #00aa00;
+    padding: 5px 10px;
+    font-size: 12px;
+}
+
+.save-btn:hover {
+    background-color: #008800;
+}
+
+.cancel-btn {
+    background-color: #888;
+    padding: 5px 10px;
+    font-size: 12px;
+}
+
+.cancel-btn:hover {
+    background-color: #666;
+}
+
+#settingsButton {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    font-size: 24px;
+    background-color: #4a004a;
+    color: white;
+    border: none;
+    border-radius: 15px;
+    width: 60px;
+    height: 60px;
+    cursor: pointer;
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+}
+
+.settings-menu {
+    position: fixed;
+    top: 0;
+    right: -100%; /* Полностью скрывает меню за правым краем экрана */
+    width: 320px;
+    height: 100vh; /* Использует полную высоту viewport */
+    background-color: #fff;
+    border-left: 2px solid #4a004a;
+    box-shadow: -4px 0 10px rgba(0,0,0,0.3);
+    transition: right 0.3s ease;
+    padding: 20px;
+    z-index: 999;
+    border-radius: 20px 0 0 20px;
+    overflow-y: auto; /* Добавляет прокрутку если контент не помещается */
+}
+
+.settings-menu.open {
+    right: 0;
+}
+
+.settings-menu h2 {
+    margin-top: 0;
+    color: #4a004a;
+}
+
+.setting-item {
+    margin: 20px 0;
+    text-align: left;
+    font-size: 16px;
+}
+
+body.dark-mode {
+    background-color: #121212;
+    color: #f0f0f0;
+}
+
+body.dark-mode .task-content,
+body.dark-mode .editing-mode,
+body.dark-mode .edit-container {
+    background-color: #333;
+    color: #f0f0f0;
+    border-color: #888;
+}
+
+body.dark-mode .settings-menu {
+    background-color: #222;
+    border-color: #888;
+    color: #f0f0f0;
+}

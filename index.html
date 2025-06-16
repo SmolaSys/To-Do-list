@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>To-Do List</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <h1>To-Do List</h1>
+
+    <button id="settingsButton">⚙️</button>
+
+    <div id="settingsMenu" class="settings-menu">
+        <h2>Налаштування</h2>
+        <div class="setting-item">
+            <label>
+                <input type="checkbox" id="darkModeToggle">
+                Темна тема
+            </label>
+        </div>
+        <div class="setting-item">
+            <label for="bgUpload">Фон:</label>
+            <input type="file" id="bgUpload" accept="image/*">
+        </div>
+        <button id="closeSettings">Закрити</button>
+    </div>
+
+    <div class="input-container">
+        <input type="text" id="taskInput" placeholder="Введіть завдання">
+        <button id="addTask">Додати завдання</button>
+    </div>
+
+    <ul id="taskList"></ul>
+
+    <script src="script.js"></script>
+</body>
+</html>
