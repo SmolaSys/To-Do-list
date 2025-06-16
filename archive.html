@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Архів завдань</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .back-button {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            font-size: 18px;
+            background-color: #4a004a;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            padding: 10px 20px;
+            cursor: pointer;
+            z-index: 1000;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .back-button:hover {
+            background-color: #6a006a;
+        }
+        
+        .archive-header {
+            margin-top: 80px;
+            margin-bottom: 30px;
+        }
+        
+        .archive-task {
+            background-color: rgba(255, 255, 255, 0.9);
+            border: 1px solid #4a004a;
+            border-radius: 5px;
+            padding: 15px;
+            margin: 10px 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .archive-task-content {
+            flex: 1;
+            text-align: left;
+            word-wrap: break-word;
+        }
+        
+        .archive-task-date {
+            font-size: 12px;
+            color: #666;
+            margin-top: 5px;
+        }
+        
+        .archive-actions {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .restore-btn {
+            background-color: #0066cc;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 12px;
+        }
+        
+        .restore-btn:hover {
+            background-color: #0052a3;
+        }
+        
+        .delete-forever-btn {
+            background-color: #cc0000;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 12px;
+        }
+        
+        .delete-forever-btn:hover {
+            background-color: #aa0000;
+        }
+        
+        .clear-archive-btn {
+            background-color: #cc6600;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 20px;
+        }
+        
+        .clear-archive-btn:hover {
+            background-color: #aa5500;
+        }
+        
+        .empty-archive {
+            text-align: center;
+            color: #666;
+            font-style: italic;
+            margin: 50px 0;
+        }
+        
+        body.dark-mode .archive-task {
+            background-color: rgba(51, 51, 51, 0.9);
+            color: #f0f0f0;
+            border-color: #888;
+        }
+        
+        body.dark-mode .archive-task-date {
+            color: #ccc;
+        }
+        
+        body.dark-mode .empty-archive {
+            color: #ccc;
+        }
+    </style>
+</head>
+<body>
+    <a href="index.html" class="back-button">← Назад</a>
+    
+    <div class="archive-header">
+        <h1>Архів завдань</h1>
+        <button id="clearArchive" class="clear-archive-btn">Очистити архів</button>
+    </div>
+
+    <div id="archiveList"></div>
+
+    <script>
+        function loadArchive() {
+            const archivedTasks = JSON.parse(localStorage.getItem("archivedTasks")) || [];
+            renderArchive(archivedTasks);
+            
+            // Применяем темную тему если она была включена
+            if (localStorage.getItem("darkMode") === "enabled") {
+                document.body.classList.add("dark-mode");
+            }
+            
+            // Применяем фоновое изображение если оно было установлено
+            const bg = localStorage.getItem("backgroundImage");
+            if (bg) {
+                document.body.style.backgroundImage = `url('${bg}')`;
+            }
+        }
+
+        function renderArchive(archivedTasks) {
+            const archiveList = document.getElementById("archiveList");
+            
+            if (archivedTasks.length === 0) {
+                archiveList.innerHTML = '<div class="empty-archive">Архів порожній</div>';
+                return;
+            }
+            
+            archiveList.innerHTML = "";
+            archivedTasks.forEach((item, index) => {
+                const taskDiv = document.createElement("div");
+                taskDiv.className = "archive-task";
+                
+                // Поддерживаем старый формат архива
+                const taskText = item.task || item.text || 'Невідоме завдання';
+                const createdDate = item.created || 'Невідомо';
+                const archivedDate = item.archived || item.date || 'Невідомо';
+                
+                taskDiv.innerHTML = `
+                    <div class="archive-task-content">
+                        <div class="archive-task-text">${taskText}</div>
+                        <div class="archive-task-date">Створено: ${createdDate}</div>
+                        <div class="archive-task-date">Архівовано: ${archivedDate}</div>
+                    </div>
+                    <div class="archive-actions">
+                        <button class="restore-btn" onclick="restoreTask(${index})">Відновити</button>
+                        <button class="delete-forever-btn" onclick="deleteForever(${index})">Видалити назавжди</button>
+                    </div>
+                `;
+                archiveList.appendChild(taskDiv);
+            });
+        }
+
+        function restoreTask(index) {
+            const archivedTasks = JSON.parse(localStorage.getItem("archivedTasks")) || [];
+            const tasks = JSON.parse(localStorage.getItem("tasks")) || [];
+            
+            // Перемещаем задачу из архива обратно в активные задачи
+            const restoredTask = archivedTasks.splice(index, 1)[0];
+            const taskToRestore = {
+                text: restoredTask.task || restoredTask.text || 'Невідоме завдання',
+                created: restoredTask.created || 'Невідомо'
+            };
+            tasks.push(taskToRestore);
+            
+            // Сохраняем изменения
+            localStorage.setItem("archivedTasks", JSON.stringify(archivedTasks));
+            localStorage.setItem("tasks", JSON.stringify(tasks));
+            
+            // Обновляем отображение
+            renderArchive(archivedTasks);
+        }
+
+        function deleteForever(index) {
+            if (confirm("Ви впевнені, що хочете видалити це завдання назавжди?")) {
+                const archivedTasks = JSON.parse(localStorage.getItem("archivedTasks")) || [];
+                archivedTasks.splice(index, 1);
+                localStorage.setItem("archivedTasks", JSON.stringify(archivedTasks));
+                renderArchive(archivedTasks);
+            }
+        }
+
+        function clearArchive() {
+            if (confirm("Ви впевнені, що хочете очистити весь архів? Ця дія незворотна!")) {
+                localStorage.setItem("archivedTasks", JSON.stringify([]));
+                renderArchive([]);
+            }
+        }
+
+        document.getElementById("clearArchive").addEventListener("click", clearArchive);
+
+        // Загружаем архив при загрузке страницы
+        loadArchive();
+    </script>
+</body>
+</html>
